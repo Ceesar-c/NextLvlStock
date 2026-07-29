@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -9,3 +10,4 @@ use Illuminate\Support\Facades\Route;
 })->middleware('auth:sanctum');*/
 
 Route::apiResource('categories', CategoryController::class);
+Route::apiResource('brands', BrandController::class);
