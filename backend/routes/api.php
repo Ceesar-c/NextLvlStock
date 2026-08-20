@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('active')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
+        Route::patch('/me/password', [AuthController::class, 'updatePassword']);
 
         // Products
         Route::controller(ProductController::class)->group(function () {

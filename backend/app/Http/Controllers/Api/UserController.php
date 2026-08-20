@@ -119,6 +119,8 @@ class UserController extends Controller
             'is_active' => false,
         ]);
 
+        $user->tokens()->delete();
+
         $user->load('role.permissions');
 
         return response()->json([
