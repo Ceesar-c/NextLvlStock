@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
+        'role_id',
     ];
 
     /**
@@ -47,5 +48,15 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return $this->role?->permissions->contains('name', $permission) ?? false;
     }
 }

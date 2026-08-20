@@ -22,9 +22,17 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $user->load('role');
+
         if(!$user->is_active){
             return response()->json([
                 'message' => 'Esta cuenta se encuentra desactivada. Contacta al administrador.',
+            ], 403);
+        }
+
+        if (!$user->role || !$user->role->is_active) {
+            return response()->json([
+                'message' => 'El rol asignado a esta cuenta se encuentra inactivo. Contacta al administrador.',
             ], 403);
         }
 
@@ -41,8 +49,22 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
+        $user = $request->user()->load('role.permissions');
+
         return response()->json([
-            'data' => $request->user(),
+            'data' => [
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'is_active' => $user->is_active,
+                ],
+                'role' => [
+                    'id' => $user->role->id,
+                    'name' => $user->role->name,
+                ],
+                'permissions' => $user->role->permissions->pluck('name')->values(),
+            ],
         ], 200);
     }
 
