@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'permission' =>  \App\Http\Middleware\PermissionMiddleware::class,
             'active' =>  \App\Http\Middleware\EnsureUserIsActive::class,
+            'role.active' => \App\Http\Middleware\EnsureRoleIsActive::class,
         ]);
 
     })
