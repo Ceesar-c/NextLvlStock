@@ -6,23 +6,23 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PermissionMiddleware
+class EnsureRoleIsActive
 {
     /**
      * Handle an incoming request.
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $permission): Response
+    public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
 
-        if (!$user || !$user->hasPermission($permission)) {
+        if (!$user || !$user->role || !$user->role->is_active) {
             return response()->json([
-                'message' => 'No tienes permiso para realizar esta acción.',
+                'message' => 'El rol asignado a esta cuenta se encuentra inactivo.',
             ], 403);
         }
-
+    
         return $next($request);
     }
 }
